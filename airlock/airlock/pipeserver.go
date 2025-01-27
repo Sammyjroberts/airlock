@@ -1,4 +1,4 @@
-package main
+package airlock
 
 import (
 	"fmt"
@@ -17,12 +17,12 @@ type RPCResponse struct {
 	Error  string      `msgpack:"error,omitempty"`
 }
 
-type proxyBase struct {
-	sockPath string
+type ProxyBase struct {
+	SockPath string
 }
 
-func (p *proxyBase) call(methodName string, args ...interface{}) (interface{}, error) {
-	conn, err := net.Dial("unix", p.sockPath)
+func (p *ProxyBase) Call(methodName string, args ...interface{}) (interface{}, error) {
+	conn, err := net.Dial("unix", p.SockPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to socket: %w", err)
 	}
@@ -49,4 +49,34 @@ func (p *proxyBase) call(methodName string, args ...interface{}) (interface{}, e
 	}
 
 	return resp.Result, nil
+}
+
+// Helper function to convert various number types to int
+func ToInt(v interface{}) (int, bool) {
+	switch num := v.(type) {
+	case int:
+		return num, true
+	case int8:
+		return int(num), true
+	case int16:
+		return int(num), true
+	case int32:
+		return int(num), true
+	case int64:
+		return int(num), true
+	case uint8:
+		return int(num), true
+	case uint16:
+		return int(num), true
+	case uint32:
+		return int(num), true
+	case uint64:
+		return int(num), true
+	case float32:
+		return int(num), true
+	case float64:
+		return int(num), true
+	default:
+		return 0, false
+	}
 }

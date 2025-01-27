@@ -3,25 +3,25 @@ package main
 
 import (
 	"fmt"
+	"sammyjroberts/airlock/airlock"
 )
 
 type MathCaller struct {
-	proxyBase
+	airlock.ProxyBase
 }
 
 func NewMathCaller(sockPath string) *MathCaller {
 	return &MathCaller{
-		proxyBase: proxyBase{sockPath: sockPath},
+		ProxyBase: airlock.ProxyBase{SockPath: sockPath},
 	}
 }
 
 func (c *MathCaller) Add(arg0 int, arg1 int) (int, error) {
-	result, err := c.call("Add", arg0, arg1)
+	result, err := c.Call("Add", arg0, arg1)
 	if err != nil {
 		return 0, err
 	}
-
-	typedResult, ok := result.(int)
+	typedResult, ok := airlock.ToInt(result)
 	if !ok {
 		return 0, fmt.Errorf("unexpected result type: %T", result)
 	}
@@ -30,7 +30,7 @@ func (c *MathCaller) Add(arg0 int, arg1 int) (int, error) {
 }
 
 func (c *MathCaller) Subtract(arg0 int, arg1 int) (int, error) {
-	result, err := c.call("Subtract", arg0, arg1)
+	result, err := c.Call("Subtract", arg0, arg1)
 	if err != nil {
 		return 0, err
 	}
@@ -44,7 +44,7 @@ func (c *MathCaller) Subtract(arg0 int, arg1 int) (int, error) {
 }
 
 func (c *MathCaller) Multiply(arg0 int, arg1 int) (int, error) {
-	result, err := c.call("Multiply", arg0, arg1)
+	result, err := c.Call("Multiply", arg0, arg1)
 	if err != nil {
 		return 0, err
 	}
@@ -58,7 +58,7 @@ func (c *MathCaller) Multiply(arg0 int, arg1 int) (int, error) {
 }
 
 func (c *MathCaller) Divide(arg0 int, arg1 int) (int, error) {
-	result, err := c.call("Divide", arg0, arg1)
+	result, err := c.Call("Divide", arg0, arg1)
 	if err != nil {
 		return 0, err
 	}
